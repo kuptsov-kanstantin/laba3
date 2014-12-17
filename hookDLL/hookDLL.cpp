@@ -5,18 +5,10 @@
 
 #include <strsafe.h>
 #include <string>
-#include <fstream>
-#include <iostream>
-using namespace std;
 
+using namespace std;
+	HWND hWnd;
 LRESULT CALLBACK HOOK(int nCode, WPARAM wParam, LPARAM lParam){
-	STRSAFE_LPCWSTR szBuf[128];
-	FindWindow();
-	STRSAFE_LPWSTR szCode;
-	HDC hdc;
-	static int c = 0;
-	size_t cch;
-	size_t * pcch;
 	HRESULT hResult;
 	HKEY reestr_k;
 	LPTSTR Reget = (LPTSTR)LocalAlloc(LMEM_ZEROINIT, 500);
@@ -34,6 +26,9 @@ LRESULT CALLBACK HOOK(int nCode, WPARAM wParam, LPARAM lParam){
 	TCHAR tzTitle[MAX_PATH];
 	GetWindowText((HWND)wParam, tzTitle, MAX_PATH);
 
+	HWND hwnd;
+	hwnd = GetForegroundWindow();
+	GetWindowText(hwnd, tzTitle, 100);
 
 	switch (LOWORD(nCode)){
 
@@ -41,6 +36,7 @@ LRESULT CALLBACK HOOK(int nCode, WPARAM wParam, LPARAM lParam){
 		switch (LOWORD(wParam)){
 
 		case SC_CLOSE:{
+		//	MessageBox(hWnd, (tzTitle), TEXT("123"), 0);
 			if (lstrcmpi(Reget, tzTitle) == 0){
 				return 1;
 			}

@@ -11,7 +11,7 @@ using namespace std;
 
 LRESULT CALLBACK HOOK(int nCode, WPARAM wParam, LPARAM lParam){
 	STRSAFE_LPCWSTR szBuf[128];
-
+	FindWindow();
 	STRSAFE_LPWSTR szCode;
 	HDC hdc;
 	static int c = 0;
@@ -33,13 +33,24 @@ LRESULT CALLBACK HOOK(int nCode, WPARAM wParam, LPARAM lParam){
 	sprintf_s(str, "%d", LOWORD(lParam));
 	TCHAR tzTitle[MAX_PATH];
 	GetWindowText((HWND)wParam, tzTitle, MAX_PATH);
-	switch (LOWORD(lParam)){
-	case SW_MINIMIZE:{
-						 if (lstrcmpi(Reget, tzTitle) == 0){
-							 return 1;
-						 }
-						 break;
+
+
+	switch (LOWORD(nCode)){
+
+	case HCBT_SYSCOMMAND:{
+		switch (LOWORD(wParam)){
+
+		case SC_CLOSE:{
+			if (lstrcmpi(Reget, tzTitle) == 0){
+				return 1;
+			}
+			break;
+		}
+		}
+		break;
 	}
+
+
 	}
 	return 0;
 }
